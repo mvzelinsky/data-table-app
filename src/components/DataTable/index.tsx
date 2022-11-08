@@ -14,7 +14,7 @@ const DataTable: FunctionComponent = () => {
 
   const fetchData = () => {
     setLoading(true);
-    fetch(`http://localhost:4000/people?_page=2`)
+    fetch(`http://localhost:4000/people`)
       .then((res) => {
         console.log(res, res.headers.get('Link'));
         return res.json();
@@ -34,15 +34,19 @@ const DataTable: FunctionComponent = () => {
     <div className="TableContainer">
       <Table>
         <DataTableHeader />
-        {data ? (
+        {!data.length && !loading && (
+          <h1>no data</h1>
+        )}
+        {!data.length && loading && (
+          <h1>Loading ...</h1>
+        )}
+        {data.length && !loading && (
           data.map(d => (
             <DataTableRow
               key={d.id}
               data={d}
             />
           ))
-        ) : (
-          <h1>no data</h1>
         )}
       </Table>
     </div>
