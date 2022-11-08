@@ -2,3 +2,11 @@
     margin: 25px;
     height: auto;
 }
+
+.SpinnerContainer {
+    height: 80vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
