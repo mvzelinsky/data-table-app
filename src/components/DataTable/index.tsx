@@ -4,22 +4,12 @@ import Table from "../common/Table";
 import DataTableHeader from "./DataTableHeader";
 import DataTableRow from "./DataTableRow";
 
+import { DataType } from './types';
+
 import './styles.css';
 
-interface DataType {
-  id: number;
-  first_name: string;
-  last_name: string;
-  email: string;
-  gender: string, // !TODO fix type to { female / male }
-  ip_address: string;
-  company_name: string;
-  account: string;
-  married: boolean;
-}
-
 const DataTable: FunctionComponent = () => {
-  const [data, setData] = useState();
+  const [data, setData] = useState<DataType[]>([]);
   const [loading, setLoading] = useState(false);  
 
   const fetchData = () => {
@@ -44,9 +34,16 @@ const DataTable: FunctionComponent = () => {
     <div className="TableContainer">
       <Table>
         <DataTableHeader />
-        <DataTableRow />
-        <DataTableRow />
-        <DataTableRow />
+        {data ? (
+          data.map(d => (
+            <DataTableRow
+              key={d.id}
+              data={d}
+            />
+          ))
+        ) : (
+          <h1>no data</h1>
+        )}
       </Table>
     </div>
   );

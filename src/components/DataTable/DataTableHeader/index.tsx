@@ -16,6 +16,21 @@ const DataTableHeader = () => {
             <TableHeaderCell>
                 email
             </TableHeaderCell>
+            <TableHeaderCell>
+                gender
+            </TableHeaderCell>
+            <TableHeaderCell>
+                IP address
+            </TableHeaderCell>
+            <TableHeaderCell>
+                Company name
+            </TableHeaderCell>
+            <TableHeaderCell>
+                Account
+            </TableHeaderCell>
+            <TableHeaderCell>
+                Married
+            </TableHeaderCell>
         </TableHeader>
     );
 };

@@ -1,4 +1,5 @@
 import React, { FunctionComponent, ReactNode } from "react";
+import './styles.css'
 
 interface Props {
     children: ReactNode;
@@ -8,9 +9,9 @@ const TableHeaderCell: FunctionComponent<Props> = (props) => {
     const { children } = props;
 
     return (
-        <td className="HeaderCell">
+        <th className="HeaderCell">
             {children}
-        </td>
+        </th>
     );
 };
 
