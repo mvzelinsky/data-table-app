@@ -35,7 +35,11 @@ const DataTable: FunctionComponent = () => {
   }, []);
 
   useEffect(() => {
-    fetchData(`http://localhost:4000/people?_page=${reduxStoreData.page}`);
+    if (reduxStoreData.searchQuery) {
+      fetchData(`http://localhost:4000/people?q=${reduxStoreData.searchQuery}&_page=${reduxStoreData.page}`);
+    } else {
+      fetchData(`http://localhost:4000/people?_page=${reduxStoreData.page}`);
+    }
   }, [fetchData, reduxStoreData]);
 
   return (
