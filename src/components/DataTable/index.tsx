@@ -1,8 +1,10 @@
 import React, { FunctionComponent, useState, useEffect } from "react";
+import Spinner from 'react-bootstrap/Spinner';
 
 import Table from "../common/Table";
 import DataTableHeader from "./DataTableHeader";
 import DataTableRow from "./DataTableRow";
+import TableFooter from "../common/TableFooter";
 
 import { DataType } from './types';
 
@@ -14,7 +16,7 @@ const DataTable: FunctionComponent = () => {
 
   const fetchData = () => {
     setLoading(true);
-    fetch(`http://localhost:4000/people`)
+    fetch(`http://localhost:4000/people?_page=5`)
       .then((res) => {
         console.log(res, res.headers.get('Link'));
         return res.json();
@@ -37,9 +39,6 @@ const DataTable: FunctionComponent = () => {
         {!data.length && !loading && (
           <h1>no data</h1>
         )}
-        {!data.length && loading && (
-          <h1>Loading ...</h1>
-        )}
         {data.length && !loading && (
           data.map(d => (
             <DataTableRow
@@ -48,7 +47,13 @@ const DataTable: FunctionComponent = () => {
             />
           ))
         )}
+        <TableFooter />
       </Table>
+      {!data.length && loading && (
+          <div className="SpinnerContainer">
+            <Spinner animation="border" />
+          </div>
+        )}
     </div>
   );
 };
