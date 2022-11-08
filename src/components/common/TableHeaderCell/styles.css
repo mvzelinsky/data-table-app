@@ -1,0 +1,13 @@
+.HeaderCell {
+  padding: 10px 0;
+  background: #ededed;
+  border: 1px solid #cfcfcf;
+}
+
+.HeaderCell:first-child {
+  border-radius: 8px 0 0 0;
+}
+
+.HeaderCell:last-child {
+  border-radius: 0 8px 0 0;
+}
