@@ -1,0 +1,9 @@
+.SearchInputContainer {
+    width: 550px;
+    display: flex;
+    margin: 32px 0 16px;
+}
+
+.SearchControl {
+    margin-right: 16px;
+}
