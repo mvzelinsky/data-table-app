@@ -1,11 +1,12 @@
 .SortContainer {
+    padding: 16px;
     display: flex;
     justify-content: space-between;
-    margin: 8px;
     cursor: pointer;
 }
 
 .SortIconsContainer {
     display: flex;
     flex-direction: column;
+    margin-left: 8px;
 }
