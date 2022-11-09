@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState, useEffect, useCallback } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Links, parseLinkHeader } from '@web3-storage/parse-link-header'
 import Spinner from 'react-bootstrap/Spinner';
 
@@ -9,12 +9,14 @@ import DataTableRow from "./DataTableRow";
 import TableFooter from "../common/TableFooter";
 
 import { DataType } from './types';
-import { TableState } from "../../store/TableReducer";
+import { setLoadingAction, TableState } from "../../store/TableReducer";
 
 import './styles.css';
 
 const DataTable: FunctionComponent = () => {
+  const dispatch = useDispatch();
   const {
+    loading,
     page,
     searchQuery,
     sortBy,
@@ -22,11 +24,10 @@ const DataTable: FunctionComponent = () => {
   }: TableState = useSelector(state => state) as TableState;
 
   const [data, setData] = useState<DataType[]>([]);
-  const [loading, setLoading] = useState(false); 
   const [paginationParams, setPaginationParams] = useState<Links | null>({});
 
   const fetchData = useCallback((url: string) => {
-    setLoading(true);
+    dispatch(setLoadingAction({ loading: true }))
     fetch(url)
       .then((res) => {
         const linkHeader = res.headers.get('Link');
@@ -36,9 +37,9 @@ const DataTable: FunctionComponent = () => {
       })
       .then((results) => {
         setData(results);
-        setLoading(false);
+        dispatch(setLoadingAction({ loading: false }))
       });
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     fetchData(`http://localhost:4000/people?q=${searchQuery}&_page=${page}&_sort=${sortBy}&_order=${sortOrder}`);
@@ -48,16 +49,16 @@ const DataTable: FunctionComponent = () => {
     <div className="TableContainer">
       <Table>
         <DataTableHeader />
-        {!data.length && !loading && (
-          <h1>no data</h1>
-        )}
-        {data.length && !loading && (
+        {Boolean(data.length) && !loading && (
           data.map(d => (
             <DataTableRow
               key={d.id}
               data={d}
             />
           ))
+        )}
+        {!data.length && !loading && (
+          <h1>no data</h1>
         )}
         <TableFooter paginationParams={paginationParams} />
       </Table>

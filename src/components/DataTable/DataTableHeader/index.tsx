@@ -5,15 +5,21 @@ import TableHeader from '../../common/TableHeader';
 import TableHeaderCell from '../../common/TableHeaderCell';
 import Sort from '../../common/Sort';
 
+import { Columns } from '../../../consts/columns';
 import { sortAction, SortOrder, TableState } from '../../../store/TableReducer';
 
 const DataTableHeader = () => {
     const dispatch = useDispatch();
     const {
+        sortBy,
         sortOrder,
     }: TableState = useSelector(state => state) as TableState;
 
-    const getNewSortOrder = () => {
+    const getNewSortOrder = (newSortingField: string) => {
+        if (sortBy !== newSortingField) {
+            return SortOrder.ASC;
+        }
+
         if (sortOrder === SortOrder.ASC) {
             return SortOrder.DESC;
         } else if (sortOrder === SortOrder.DESC) {
@@ -24,7 +30,7 @@ const DataTableHeader = () => {
     }
  
     const handleSort = (field: string) => {
-        const newSortOrder = getNewSortOrder();
+        const newSortOrder = getNewSortOrder(field);
         const sortField = newSortOrder === SortOrder.OFF ? 'id' : field;
         dispatch(sortAction({
             sortBy: sortField,
@@ -37,30 +43,58 @@ const DataTableHeader = () => {
             <TableHeaderCell>
                 <Sort 
                     columnName="First name"
-                    columnValue="first_name"
-                    onSort={() => handleSort('first_name')}
+                    columnValue={Columns.FIRST_NAME}
+                    onSort={() => handleSort(Columns.FIRST_NAME)}
                 />
             </TableHeaderCell>
             <TableHeaderCell>
-                Last name
+                <Sort 
+                    columnName="Last name"
+                    columnValue={Columns.LAST_NAME}
+                    onSort={() => handleSort(Columns.LAST_NAME)}
+                />
             </TableHeaderCell>
             <TableHeaderCell>
-                email
+                <Sort 
+                    columnName="Email"
+                    columnValue={Columns.EMAIL}
+                    onSort={() => handleSort(Columns.EMAIL)}
+                />
             </TableHeaderCell>
             <TableHeaderCell>
-                gender
+                <Sort 
+                    columnName="Gender"
+                    columnValue={Columns.GENDER}
+                    onSort={() => handleSort(Columns.GENDER)}
+                />
             </TableHeaderCell>
             <TableHeaderCell>
-                IP address
+                <Sort 
+                    columnName="IP Address"
+                    columnValue={Columns.IP_ADDRESS}
+                    onSort={() => handleSort(Columns.IP_ADDRESS)}
+                />
             </TableHeaderCell>
             <TableHeaderCell>
-                Company name
+                <Sort 
+                    columnName="Company name"
+                    columnValue={Columns.COMPANY_NAME}
+                    onSort={() => handleSort(Columns.COMPANY_NAME)}
+                />
             </TableHeaderCell>
             <TableHeaderCell>
-                Account
+                <Sort 
+                    columnName="Account"
+                    columnValue={Columns.ACCOUNT}
+                    onSort={() => handleSort(Columns.ACCOUNT)}
+                />
             </TableHeaderCell>
             <TableHeaderCell>
-                Married
+                <Sort 
+                    columnName="Married"
+                    columnValue={Columns.MARRIED}
+                    onSort={() => handleSort(Columns.MARRIED)}
+                />
             </TableHeaderCell>
         </TableHeader>
     );
