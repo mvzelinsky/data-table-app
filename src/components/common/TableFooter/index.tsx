@@ -1,25 +1,25 @@
-import React, { FunctionComponent, MouseEventHandler, useMemo } from 'react';
+import React, { FunctionComponent, useMemo } from 'react';
 import Pagination from 'react-bootstrap/Pagination';
 import { Links } from '@web3-storage/parse-link-header';
+import { useDispatch } from "react-redux";
+
+import {
+    toFirstPageAction,
+    toLastPageAction,
+    toNextPageAction,
+    toPrevPageAction
+} from '../../../store/TableReducer';
 
 import './styles.css';
 
 interface Props {
     paginationParams: Links | null;
-    onPrevPage: MouseEventHandler<HTMLElement>;
-    onNextPage: MouseEventHandler<HTMLElement>;
-    onLastPage: MouseEventHandler<HTMLElement>;
-    onFirstPage: MouseEventHandler<HTMLElement>;
 }
 
 const TableFooter:FunctionComponent<Props> = (props) => {
-    const {
-        paginationParams,
-        onPrevPage,
-        onNextPage,
-        onLastPage,
-        onFirstPage,
-    } = props;
+    const { paginationParams } = props;
+
+    const dispatch = useDispatch();
 
     const isFirstPage = !paginationParams?.prev;
     const isLastPage = !paginationParams?.next;
@@ -28,11 +28,27 @@ const TableFooter:FunctionComponent<Props> = (props) => {
         if (!paginationParams?.prev) {
             return 1;
         } else if (!paginationParams?.next) {
-            return paginationParams.last._page;
+            return Number(paginationParams.last._page);
         } else {
             return Number(paginationParams.next._page) - 1;
         }
     }, [paginationParams]);
+
+    const handleNextPage = () => {
+        dispatch(toNextPageAction({ page: currentPage }))
+    }
+
+    const handlePrevPage = () => {
+        dispatch(toPrevPageAction({ page: currentPage }))
+    }
+
+    const handleFirstPage = () => {
+        dispatch(toFirstPageAction({ page: 1 }))
+    }
+
+    const handleLastPage = () => {
+        dispatch(toLastPageAction({ page: Number(paginationParams?.last._page) }))
+    }
 
     return (
         <tfoot className="TableFooter">
@@ -45,11 +61,11 @@ const TableFooter:FunctionComponent<Props> = (props) => {
                         <Pagination>
                                 <Pagination.First
                                     disabled={isFirstPage} 
-                                    onClick={onFirstPage}
+                                    onClick={handleFirstPage}
                                 />
                                 <Pagination.Prev
                                     disabled={isFirstPage} 
-                                    onClick={onPrevPage}
+                                    onClick={handlePrevPage}
                                 />
 
                                 <Pagination.Item active>
@@ -58,11 +74,11 @@ const TableFooter:FunctionComponent<Props> = (props) => {
 
                                 <Pagination.Next
                                     disabled={isLastPage} 
-                                    onClick={onNextPage}
+                                    onClick={handleNextPage}
                                 />
                                 <Pagination.Last
                                     disabled={isLastPage}
-                                    onClick={onLastPage}
+                                    onClick={handleLastPage}
                                 />
                         </Pagination>
                     </div>

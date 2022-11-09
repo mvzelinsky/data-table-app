@@ -1,6 +1,7 @@
 import React, { FunctionComponent, useState, useEffect, useCallback } from "react";
-import Spinner from 'react-bootstrap/Spinner';
+import { useSelector } from "react-redux";
 import { Links, parseLinkHeader } from '@web3-storage/parse-link-header'
+import Spinner from 'react-bootstrap/Spinner';
 
 import Table from "../common/Table";
 import DataTableHeader from "./DataTableHeader";
@@ -12,13 +13,15 @@ import { DataType } from './types';
 import './styles.css';
 
 const DataTable: FunctionComponent = () => {
+  const reduxStoreData: any = useSelector(state => state);
+
   const [data, setData] = useState<DataType[]>([]);
   const [loading, setLoading] = useState(false); 
   const [paginationParams, setPaginationParams] = useState<Links | null>({});
 
-  const fetchData = useCallback((url: Links | string) => {
+  const fetchData = useCallback((url: string) => {
     setLoading(true);
-    fetch(url as RequestInfo | URL)
+    fetch(url)
       .then((res) => {
         const linkHeader = res.headers.get('Link');
         const parsed = parseLinkHeader(linkHeader);
@@ -32,33 +35,12 @@ const DataTable: FunctionComponent = () => {
   }, []);
 
   useEffect(() => {
-    fetchData('http://localhost:4000/people?_page=1');
-  }, []);
-
-  const handlePrevPage = useCallback(() => {
-    if (paginationParams?.prev.url) {
-      fetchData(paginationParams.prev.url);
-    };
-  }, [fetchData, paginationParams]);
-
-  const handleNextPage = useCallback(() => {
-    if (paginationParams?.next.url) {
-      fetchData(paginationParams.next.url);
-    };
-  }, [fetchData, paginationParams]);
-
-  const handleLastPage = useCallback(() => {
-    if (paginationParams?.last.url) {
-      fetchData(paginationParams.last.url);
-    };
-  }, [fetchData, paginationParams]);
-
-  const handleFirstPage = useCallback(() => {
-    if (paginationParams?.first.url) {
-      fetchData(paginationParams.first.url);
-    };
-  }, [fetchData, paginationParams]);
-
+    if (reduxStoreData.searchQuery) {
+      fetchData(`http://localhost:4000/people?q=${reduxStoreData.searchQuery}&_page=${reduxStoreData.page}`);
+    } else {
+      fetchData(`http://localhost:4000/people?_page=${reduxStoreData.page}`);
+    }
+  }, [fetchData, reduxStoreData]);
 
   return (
     <div className="TableContainer">
@@ -75,13 +57,7 @@ const DataTable: FunctionComponent = () => {
             />
           ))
         )}
-        <TableFooter
-          paginationParams={paginationParams}
-          onPrevPage={handlePrevPage}
-          onNextPage={handleNextPage}
-          onLastPage={handleLastPage}
-          onFirstPage={handleFirstPage}
-        />
+        <TableFooter paginationParams={paginationParams} />
       </Table>
       {!data.length && loading && (
           <div className="SpinnerContainer">
