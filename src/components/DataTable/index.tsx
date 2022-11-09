@@ -57,7 +57,7 @@ const DataTable: FunctionComponent = () => {
             />
           ))
         )}
-        {!data.length && (
+        {(!data.length || loading) && (
           <DataTablePlug
             isDataEmpty={!data.length}
             loading={loading}
