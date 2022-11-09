@@ -1,21 +1,21 @@
 import React, { FunctionComponent, useState, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Links, parseLinkHeader } from '@web3-storage/parse-link-header'
-import Spinner from 'react-bootstrap/Spinner';
 
 import Table from "../common/Table";
 import DataTableHeader from "./DataTableHeader";
 import DataTableRow from "./DataTableRow";
+import DataTablePlug from "./DataTablePlug";
 import TableFooter from "../common/TableFooter";
 
-import { DataType } from './types';
-import { setLoadingAction, TableState } from "../../store/TableReducer";
+import { setDataAction, setLoadingAction, TableState } from "../../store/TableReducer";
 
 import './styles.css';
 
 const DataTable: FunctionComponent = () => {
   const dispatch = useDispatch();
   const {
+    data,
     loading,
     page,
     searchQuery,
@@ -23,7 +23,6 @@ const DataTable: FunctionComponent = () => {
     sortOrder
   }: TableState = useSelector(state => state) as TableState;
 
-  const [data, setData] = useState<DataType[]>([]);
   const [paginationParams, setPaginationParams] = useState<Links | null>({});
 
   const fetchData = useCallback((url: string) => {
@@ -36,7 +35,7 @@ const DataTable: FunctionComponent = () => {
         return res.json();
       })
       .then((results) => {
-        setData(results);
+        dispatch(setDataAction({ data: results }))
         dispatch(setLoadingAction({ loading: false }))
       });
   }, [dispatch]);
@@ -57,16 +56,14 @@ const DataTable: FunctionComponent = () => {
             />
           ))
         )}
-        {!data.length && !loading && (
-          <h1>no data</h1>
+        {!data.length && (
+          <DataTablePlug
+            isDataEmpty={!data.length}
+            loading={loading}
+          />
         )}
         <TableFooter paginationParams={paginationParams} />
       </Table>
-      {!data.length && loading && (
-          <div className="SpinnerContainer">
-            <Spinner animation="border" />
-          </div>
-        )}
     </div>
   );
 };

@@ -1,3 +1,5 @@
+import { DataType } from "../components/DataTable/types";
+
 export enum SortOrder {
     ASC = 'asc',
     DESC = 'desc',
@@ -5,6 +7,7 @@ export enum SortOrder {
 }
 
 export interface TableState {
+  data: DataType[],
   searchQuery: string,
   page: number,
   loading: boolean,
@@ -12,6 +15,9 @@ export interface TableState {
   sortOrder: SortOrder,
 }
 
+interface IData {
+    data: DataType[],
+}
 interface ILoading {
     loading: boolean,
 }
@@ -27,6 +33,7 @@ interface ISort {
 }
   
 const defaultState: TableState = {
+  data: [],
   searchQuery: '',
   page: 1,
   loading: false,
@@ -34,6 +41,7 @@ const defaultState: TableState = {
   sortOrder: SortOrder.ASC,
 }
 
+const SET_DATA = 'SET_DATA';
 const SET_LOADING = 'SET_LOADING';
 const TO_NEXT_PAGE = 'TO_NEXT_PAGE';
 const TO_PREV_PAGE = 'TO_PREV_PAGE'
@@ -44,6 +52,8 @@ const SORT = 'SORT';
 
 export const reducer = (state = defaultState, action: any) => {
     switch(action.type) {
+    case SET_DATA:
+        return { ...state, data: [...action.payload.data]}
     case SET_LOADING:
         return { ...state, loading: action.payload.loading};
     case TO_NEXT_PAGE:
@@ -66,7 +76,8 @@ export const reducer = (state = defaultState, action: any) => {
         return state;
     }
 };
-  
+
+export const setDataAction = (payload: IData) => ({ type: SET_DATA, payload })
 export const setLoadingAction = (payload: ILoading) => ({ type: SET_LOADING, payload })
 export const toNextPageAction = (payload: IPage) => ({ type: TO_NEXT_PAGE, payload });
 export const toPrevPageAction = (payload: IPage) => ({ type: TO_PREV_PAGE, payload });

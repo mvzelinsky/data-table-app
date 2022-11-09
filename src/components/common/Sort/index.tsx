@@ -42,10 +42,10 @@ const Sort: FunctionComponent<Props> = (props) => {
       </div>
       <div className="SortIconsContainer">
           <CaretUp
-            color={isUpActive ? "blue" : "grey"}
+            color={isUpActive ? "#0d6efd" : "grey"}
           />
           <CaretDown
-            color={isDownActive ? "blue" : "grey"}
+            color={isDownActive ? "#0d6efd" : "grey"}
           />
       </div>
     </div>
