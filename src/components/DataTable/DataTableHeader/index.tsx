@@ -6,7 +6,8 @@ import TableHeaderCell from '../../common/TableHeaderCell';
 import Sort from '../../common/Sort';
 
 import { Columns } from '../../../consts/columns';
-import { sortAction, SortOrder, TableState } from '../../../store/TableReducer';
+import { sortAction, SortOrder } from '../../../store/TableReducer';
+import { TableState } from '../../../store/types';
 
 const DataTableHeader = () => {
     const dispatch = useDispatch();
