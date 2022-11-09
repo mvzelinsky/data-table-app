@@ -2,7 +2,8 @@ import React, { FunctionComponent, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { CaretUp, CaretDown } from 'react-bootstrap-icons';
 
-import { SortOrder, TableState } from "../../../store/TableReducer";
+import { SortOrder } from "../../../store/TableReducer";
+import { TableState } from "../../../store/types";
 
 import './styles.css';
 

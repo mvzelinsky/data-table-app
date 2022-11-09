@@ -8,7 +8,8 @@ import DataTableRow from "./DataTableRow";
 import DataTablePlug from "./DataTablePlug";
 import TableFooter from "../common/TableFooter";
 
-import { setDataAction, setLoadingAction, TableState } from "../../store/TableReducer";
+import { setDataAction, setLoadingAction } from "../../store/TableReducer";
+import { TableState } from "../../store/types";
 
 import './styles.css';
 

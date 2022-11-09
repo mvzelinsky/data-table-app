@@ -1,35 +1,17 @@
-import { DataType } from "../components/DataTable/types";
+import {
+    Data,
+    Loading,
+    Page,
+    SearchQuery,
+    Sort,
+    TableState,
+} from "./types";
+import { TableActions } from '../consts/actions';
 
 export enum SortOrder {
     ASC = 'asc',
     DESC = 'desc',
     OFF = 'off'
-}
-
-export interface TableState {
-  data: DataType[],
-  searchQuery: string,
-  page: number,
-  loading: boolean,
-  sortBy: string,
-  sortOrder: SortOrder,
-}
-
-interface IData {
-    data: DataType[],
-}
-interface ILoading {
-    loading: boolean,
-}
-interface IPage {
-    page: number,
-}
-interface ISearchQuery {
-    searchQuery: string,
-}
-interface ISort {
-    sortBy: string,
-    sortOrder: string,
 }
   
 const defaultState: TableState = {
@@ -41,32 +23,23 @@ const defaultState: TableState = {
   sortOrder: SortOrder.ASC,
 }
 
-const SET_DATA = 'SET_DATA';
-const SET_LOADING = 'SET_LOADING';
-const TO_NEXT_PAGE = 'TO_NEXT_PAGE';
-const TO_PREV_PAGE = 'TO_PREV_PAGE'
-const TO_FIRST_PAGE = 'TO_FIRST_PAGE';
-const TO_LAST_PAGE = 'TO_LAST_PAGE';
-const SEARCH = 'SEARCH';
-const SORT = 'SORT';
-
 export const reducer = (state = defaultState, action: any) => {
     switch(action.type) {
-    case SET_DATA:
+    case TableActions.SET_DATA:
         return { ...state, data: [...action.payload.data]}
-    case SET_LOADING:
+    case TableActions.SET_LOADING:
         return { ...state, loading: action.payload.loading};
-    case TO_NEXT_PAGE:
+    case TableActions.TO_NEXT_PAGE:
         return { ...state, page: action.payload.page + 1};
-    case TO_PREV_PAGE:
+    case TableActions.TO_PREV_PAGE:
         return { ...state, page: action.payload.page - 1};
-    case TO_FIRST_PAGE:
+    case TableActions.TO_FIRST_PAGE:
         return { ...state, page: action.payload.page};
-    case TO_LAST_PAGE:
+    case TableActions.TO_LAST_PAGE:
         return { ...state, page: action.payload.page};
-    case SEARCH:
+    case TableActions.SEARCH:
         return { ...defaultState, searchQuery: action.payload.searchQuery }
-    case SORT:
+    case TableActions.SORT:
         return {
             ...defaultState, 
             sortBy: action.payload.sortBy,
@@ -77,11 +50,11 @@ export const reducer = (state = defaultState, action: any) => {
     }
 };
 
-export const setDataAction = (payload: IData) => ({ type: SET_DATA, payload })
-export const setLoadingAction = (payload: ILoading) => ({ type: SET_LOADING, payload })
-export const toNextPageAction = (payload: IPage) => ({ type: TO_NEXT_PAGE, payload });
-export const toPrevPageAction = (payload: IPage) => ({ type: TO_PREV_PAGE, payload });
-export const toFirstPageAction = (payload: IPage) => ({ type: TO_FIRST_PAGE, payload });
-export const toLastPageAction = (payload: IPage) => ({ type: TO_LAST_PAGE, payload });
-export const searchAction = (payload: ISearchQuery) => ({ type: SEARCH, payload })
-export const sortAction = (payload: ISort) => ({ type: SORT, payload });
+export const setDataAction = (payload: Data) => ({ type: TableActions.SET_DATA, payload })
+export const setLoadingAction = (payload: Loading) => ({ type: TableActions.SET_LOADING, payload })
+export const toNextPageAction = (payload: Page) => ({ type: TableActions.TO_NEXT_PAGE, payload });
+export const toPrevPageAction = (payload: Page) => ({ type: TableActions.TO_PREV_PAGE, payload });
+export const toFirstPageAction = (payload: Page) => ({ type: TableActions.TO_FIRST_PAGE, payload });
+export const toLastPageAction = (payload: Page) => ({ type: TableActions.TO_LAST_PAGE, payload });
+export const searchAction = (payload: SearchQuery) => ({ type: TableActions.SEARCH, payload })
+export const sortAction = (payload: Sort) => ({ type: TableActions.SORT, payload });
