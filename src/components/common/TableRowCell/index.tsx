@@ -3,13 +3,20 @@ import './styles.css';
 
 interface Props {
     children: ReactNode;
+    colspan?: number;
 }
 
 const TableRowCell: FunctionComponent<Props> = (props) => {
-    const { children } = props;
+    const {
+        children,
+        colspan,
+    } = props;
 
     return (
-        <td className="TableRowCell">
+        <td
+            className="TableRowCell"
+            colSpan={colspan}
+        >
             {children}
         </td>
     );

@@ -1,26 +1,32 @@
 import React, { FunctionComponent, useState, useEffect, useCallback } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Links, parseLinkHeader } from '@web3-storage/parse-link-header'
-import Spinner from 'react-bootstrap/Spinner';
 
 import Table from "../common/Table";
 import DataTableHeader from "./DataTableHeader";
 import DataTableRow from "./DataTableRow";
+import DataTablePlug from "./DataTablePlug";
 import TableFooter from "../common/TableFooter";
 
-import { DataType } from './types';
+import { setDataAction, setLoadingAction, TableState } from "../../store/TableReducer";
 
 import './styles.css';
 
 const DataTable: FunctionComponent = () => {
-  const reduxStoreData: any = useSelector(state => state);
+  const dispatch = useDispatch();
+  const {
+    data,
+    loading,
+    page,
+    searchQuery,
+    sortBy,
+    sortOrder
+  }: TableState = useSelector(state => state) as TableState;
 
-  const [data, setData] = useState<DataType[]>([]);
-  const [loading, setLoading] = useState(false); 
   const [paginationParams, setPaginationParams] = useState<Links | null>({});
 
   const fetchData = useCallback((url: string) => {
-    setLoading(true);
+    dispatch(setLoadingAction({ loading: true }))
     fetch(url)
       .then((res) => {
         const linkHeader = res.headers.get('Link');
@@ -29,27 +35,20 @@ const DataTable: FunctionComponent = () => {
         return res.json();
       })
       .then((results) => {
-        setData(results);
-        setLoading(false);
+        dispatch(setDataAction({ data: results }))
+        dispatch(setLoadingAction({ loading: false }))
       });
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
-    if (reduxStoreData.searchQuery) {
-      fetchData(`http://localhost:4000/people?q=${reduxStoreData.searchQuery}&_page=${reduxStoreData.page}`);
-    } else {
-      fetchData(`http://localhost:4000/people?_page=${reduxStoreData.page}`);
-    }
-  }, [fetchData, reduxStoreData]);
+    fetchData(`http://localhost:4000/people?q=${searchQuery}&_page=${page}&_sort=${sortBy}&_order=${sortOrder}`);
+  }, [fetchData, page, searchQuery, sortBy, sortOrder]);
 
   return (
     <div className="TableContainer">
       <Table>
         <DataTableHeader />
-        {!data.length && !loading && (
-          <h1>no data</h1>
-        )}
-        {data.length && !loading && (
+        {Boolean(data.length) && !loading && (
           data.map(d => (
             <DataTableRow
               key={d.id}
@@ -57,13 +56,14 @@ const DataTable: FunctionComponent = () => {
             />
           ))
         )}
+        {!data.length && (
+          <DataTablePlug
+            isDataEmpty={!data.length}
+            loading={loading}
+          />
+        )}
         <TableFooter paginationParams={paginationParams} />
       </Table>
-      {!data.length && loading && (
-          <div className="SpinnerContainer">
-            <Spinner animation="border" />
-          </div>
-        )}
     </div>
   );
 };
