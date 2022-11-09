@@ -9,11 +9,17 @@ import DataTableRow from "./DataTableRow";
 import TableFooter from "../common/TableFooter";
 
 import { DataType } from './types';
+import { TableState } from "../../store/TableReducer";
 
 import './styles.css';
 
 const DataTable: FunctionComponent = () => {
-  const reduxStoreData: any = useSelector(state => state);
+  const {
+    page,
+    searchQuery,
+    sortBy,
+    sortOrder
+  }: TableState = useSelector(state => state) as TableState;
 
   const [data, setData] = useState<DataType[]>([]);
   const [loading, setLoading] = useState(false); 
@@ -35,12 +41,8 @@ const DataTable: FunctionComponent = () => {
   }, []);
 
   useEffect(() => {
-    if (reduxStoreData.searchQuery) {
-      fetchData(`http://localhost:4000/people?q=${reduxStoreData.searchQuery}&_page=${reduxStoreData.page}`);
-    } else {
-      fetchData(`http://localhost:4000/people?_page=${reduxStoreData.page}`);
-    }
-  }, [fetchData, reduxStoreData]);
+    fetchData(`http://localhost:4000/people?q=${searchQuery}&_page=${page}&_sort=${sortBy}&_order=${sortOrder}`);
+  }, [fetchData, page, searchQuery, sortBy, sortOrder]);
 
   return (
     <div className="TableContainer">
