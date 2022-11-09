@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useRef } from "react";
 import { useDispatch } from "react-redux";
 
 import Button from 'react-bootstrap/Button';
@@ -10,8 +10,10 @@ import { searchAction } from "../../../store/TableReducer";
 const SearchInput: FunctionComponent = () => {
   const dispatch = useDispatch();
 
-  const handleSearch: React.MouseEventHandler<HTMLButtonElement> | undefined = (e) => {
-    dispatch(searchAction({ searchQuery: '' }));
+  const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
+
+  const handleSearch: React.MouseEventHandler<HTMLButtonElement> | undefined = () => {
+    dispatch(searchAction({ searchQuery: inputRef.current.value }));
   }
 
   const handleKeyDown: React.KeyboardEventHandler<any> | undefined = (e) => {
@@ -27,6 +29,7 @@ const SearchInput: FunctionComponent = () => {
             className="SearchControl"
             type="text"
             placeholder="Search..."
+            ref={inputRef}
             onKeyDown={handleKeyDown}
         />
         <Button
