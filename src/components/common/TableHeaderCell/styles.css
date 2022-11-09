@@ -1,7 +1,11 @@
 .HeaderCell {
-  padding: 10px 0;
+  padding: 0;
   background: #ededed;
   border: 1px solid #dee2e6;
+}
+
+.HeaderCell:hover {
+  background: #e6e6e6;
 }
 
 .HeaderCell:first-child {

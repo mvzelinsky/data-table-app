@@ -2,7 +2,8 @@ import React, { FunctionComponent, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { CaretUp, CaretDown } from 'react-bootstrap-icons';
 
-import { SortOrder, TableState } from "../../../store/TableReducer";
+import { SortOrder } from "../../../store/TableReducer";
+import { TableState } from "../../../store/types";
 
 import './styles.css';
 
@@ -42,10 +43,10 @@ const Sort: FunctionComponent<Props> = (props) => {
       </div>
       <div className="SortIconsContainer">
           <CaretUp
-            color={isUpActive ? "#0d6efd" : "grey"}
+            color={isUpActive ? "#0d6efd" : "black"}
           />
           <CaretDown
-            color={isDownActive ? "#0d6efd" : "grey"}
+            color={isDownActive ? "#0d6efd" : "black"}
           />
       </div>
     </div>
